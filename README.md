@@ -48,3 +48,6 @@ This project was developed as part of a research study on factors affecting user
 ## Author
 D C D Kulananda
 Developed for academic and research purposes.
+
+## Application Phase 
+application is still in beta Phase.
