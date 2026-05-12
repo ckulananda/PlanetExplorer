@@ -46,4 +46,5 @@ This project was developed as part of a research study on factors affecting user
 - Student progress analytics
 
 ## Author
+D C D Kulananda
 Developed for academic and research purposes.
