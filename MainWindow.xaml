@@ -1,0 +1,435 @@
+﻿<Window x:Class="PlanetExplorer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:h="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
+        Title="Planet Explorer"
+        Height="760"
+        Width="1300"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F0F12">
+
+    <!-- ================= GLOBAL STYLES (modern dark UI) ================= -->
+    <Window.Resources>
+
+        <!-- Base text style -->
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+
+        <!-- Modern Button -->
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#232833"/>
+            <Setter Property="BorderBrush" Value="#2E3442"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2B3140"/>
+                                <Setter Property="BorderBrush" Value="#3A4257"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1E2230"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ToggleButton (pill look) -->
+        <Style TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#232833"/>
+            <Setter Property="BorderBrush" Value="#2E3442"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" Value="#1B3C5A"/>
+                                <Setter Property="BorderBrush" Value="#2C79B8"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2B3140"/>
+                                <Setter Property="BorderBrush" Value="#3A4257"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ComboBox dark look + dropdown items -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#232833"/>
+            <Setter Property="BorderBrush" Value="#2E3442"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#232833"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#2B3140"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#1B3C5A"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ListBox item nicer highlight -->
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#2A2F3B"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#1B3C5A"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <!-- ================= ROOT GRID DEFINITIONS ================= -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ================= LEFT SIDEBAR ================= -->
+        <Border Grid.Row="0"
+                Grid.Column="0"
+                Background="#181A20"
+                Padding="16">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="SOLAR SYSTEM"
+                           Foreground="#6CC4FF"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,0,0,14"/>
+
+                <!-- ✅ Better: let it expand naturally -->
+                <Border Grid.Row="1"
+                        Background="#22252D"
+                        CornerRadius="12"
+                        BorderBrush="#2A2D36"
+                        BorderThickness="1"
+                        Padding="6"
+                        Margin="0,0,0,14">
+                    <ListBox x:Name="PlanetList"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             VirtualizingPanel.IsVirtualizing="True"
+                             VirtualizingPanel.VirtualizationMode="Recycling"/>
+                </Border>
+
+                <Border Grid.Row="2"
+                        Background="#12141A"
+                        CornerRadius="12"
+                        Padding="12"
+                        BorderBrush="#2A2D36"
+                        BorderThickness="1">
+                    <StackPanel>
+
+                        <TextBlock Text="Planet Info"
+                                   Foreground="#6CC4FF"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Name:"
+                                   Foreground="White"
+                                   FontWeight="SemiBold"/>
+                        <TextBlock x:Name="PlanetName"
+                                   Foreground="#BBBBBB"
+                                   Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Description:"
+                                   Foreground="White"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,6"/>
+
+                        <!-- ✅ Scrollable description -->
+                        <ScrollViewer Height="180"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Disabled">
+                            <TextBlock x:Name="PlanetDescription"
+                                       Foreground="#BBBBBB"
+                                       TextWrapping="Wrap"/>
+                        </ScrollViewer>
+
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+        </Border>
+
+        <!-- ================= 3D VIEW (WITH OVERLAY TOOLTIP) ================= -->
+        <Border Grid.Row="0"
+                Grid.Column="1"
+                Background="Black">
+
+            <Grid>
+                <h:HelixViewport3D x:Name="HelixView"
+                                  ShowFrameRate="True"
+                                  ZoomExtentsWhenLoaded="True"
+                                  IsHeadLightEnabled="True"
+                                  Background="Black">
+
+                    <h:HelixViewport3D.Camera>
+                        <PerspectiveCamera Position="0,30,70"
+                                           LookDirection="0,-10,-70"
+                                           UpDirection="0,1,0"
+                                           FieldOfView="45"/>
+                    </h:HelixViewport3D.Camera>
+
+                    <!-- ✅ Lights must be inside ModelVisual3D -->
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup>
+                                <AmbientLight Color="#404040"/>
+                                <DirectionalLight Color="#FFFFFF" Direction="-0.5,-1,-0.5"/>
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+
+                    <!-- optional extra helix light -->
+                    <h:SunLight/>
+                </h:HelixViewport3D>
+
+                <!-- Hover tooltip overlay (top-right) -->
+                <Border x:Name="HoverTip"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="14"
+                        Padding="12"
+                        CornerRadius="12"
+                        Background="#CC111318"
+                        BorderBrush="#334C9BD6"
+                        BorderThickness="1"
+                        Visibility="Collapsed"
+                        IsHitTestVisible="False">
+                    <StackPanel>
+                        <TextBlock x:Name="HoverTipTitle"
+                                   Foreground="#6CC4FF"
+                                   FontWeight="Bold"
+                                   FontSize="14"/>
+                        <TextBlock x:Name="HoverTipBody"
+                                   Foreground="#D0D0D0"
+                                   FontSize="12"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="280"
+                                   Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ================= BOTTOM CONTROL BAR ================= -->
+        <Border Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Background="#15171C"
+                Padding="14"
+                BorderBrush="#232733"
+                BorderThickness="1,1,1,0">
+
+            <Grid>
+                <!-- ✅ Fixed columns so buttons DON'T overlap -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 0 Solar -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 1 Planet -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 2 Rings -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 3 Measure -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 4 Speed -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- 5 Status (fills space) -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 6 Profile -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 7 Cosmic Map -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 8 TakeQuiz -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- 9 AvgScore -->
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Solar View"
+                        Width="120"
+                        Height="38"
+                        Margin="0,0,10,0"
+                        Grid.Column="0"
+                        Click="SolarView_Click"/>
+
+                <Button Content="Planet View"
+                        Width="120"
+                        Height="38"
+                        Grid.Column="1"
+                        Margin="0,0,10,0"
+                        Click="PlanetView_Click"/>
+
+                <ToggleButton x:Name="OrbitRingsToggle"
+                              Grid.Column="2"
+                              Content="Orbit Rings"
+                              Width="140"
+                              Height="38"
+                              IsChecked="True"
+                              Checked="OrbitRingsToggle_Checked"
+                              Unchecked="OrbitRingsToggle_Unchecked"
+                              Margin="0,0,10,0"/>
+
+                <ToggleButton x:Name="MeasureToggle"
+                              Grid.Column="3"
+                              Content="Measure"
+                              Width="120"
+                              Height="38"
+                              Margin="0,0,10,0"
+                              IsEnabled="False"/>
+
+                <ComboBox x:Name="SpeedCombo"
+                          Grid.Column="4"
+                          Foreground="#6CC4FF"
+                          Width="50"
+                          Height="25"
+                          Margin="0,0,14,0"
+                          VerticalAlignment="Center"
+                          SelectedIndex="0"
+                          IsEnabled="False">
+                    <ComboBoxItem Content="Speed of Light (299,792 km/s)" Tag="299792"/>
+                    <ComboBoxItem Content="Spaceship (20 km/s)" Tag="20"/>
+                    <ComboBoxItem Content="Jet (0.25 km/s)" Tag="0.25"/>
+                </ComboBox>
+
+                <StackPanel Grid.Column="5"
+                            VerticalAlignment="Center"
+                            Margin="0,0,14,0">
+                    <TextBlock x:Name="UserStatusText"
+                               Foreground="#BBBBBE"
+                               FontSize="12"
+                               Text="No user selected. Register to unlock Quiz/Measure."
+                               TextWrapping="Wrap"
+                               MaxWidth="640"/>
+
+                    <TextBlock x:Name="MeasureResultText"
+                               Foreground="#6CC4FF"
+                               FontWeight="Bold"
+                               Text=""
+                               TextWrapping="Wrap"
+                               MaxWidth="640"/>
+                </StackPanel>
+
+                <Button x:Name="ProfileButton"
+                        Content="Profile"
+                        Width="120"
+                        Height="38"
+                        Grid.Column="6"
+                        Margin="0,0,10,0"
+                        Click="OpenProfile_Click"/>
+
+                <Button Content="Cosmic Map"
+                        Width="130"
+                        Height="38"
+                        Grid.Column="7"
+                        Margin="0,0,10,0"
+                        Click="CosmicMap_Click"/>
+
+                <Button x:Name="TakeQuizButton"
+                        Content="Take Quiz"
+                        Width="120"
+                        Height="38"
+                        Grid.Column="8"
+                        Margin="0,0,10,0"
+                        Click="TakeQuizButton_Click"
+                        IsEnabled="False"/>
+
+                <TextBlock x:Name="AvgScoreText"
+                           Grid.Column="9"
+                           Foreground="#6CC4FF"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Margin="0,0,6,0"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

@@ -1,0 +1,9 @@
+﻿<Window x:Class="PlanetExplorer.ShellWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PlanetExplorer"
+        Height="720" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="Black">
+    <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+</Window>
